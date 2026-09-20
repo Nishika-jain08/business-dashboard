@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlmaBridge — Student Opportunity Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#20243A; --navy-2:#303653; --teal:#6C63A8; --teal-light:#EEEAFB;
+  --gold:#D88972; --gold-light:#FBEAE5; --cream:#F7F6FB; --white:#FFFFFF;
+  --ink:#25283A; --muted:#74778A; --line:#E6E4EE; --green:#5C9B82;
+  --shadow:0 18px 45px rgba(32,36,58,.10); --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.app{display:flex;min-height:100vh}
+.sidebar{width:255px;background:var(--navy);color:#fff;padding:25px 18px;position:fixed;inset:0 auto 0 0;z-index:20;display:flex;flex-direction:column}
+.logo{display:flex;align-items:center;gap:11px;padding:5px 9px 30px}
+.logo-mark{width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#9A91D8,#6C63A8);display:grid;place-items:center;position:relative;box-shadow:0 8px 20px rgba(108,99,168,.28)}
+.logo-mark:before,.logo-mark:after{content:"";position:absolute;border:2px solid #fff;border-radius:50%;width:15px;height:15px}
+.logo-mark:before{left:8px;top:9px;transform:rotate(-18deg)}
+.logo-mark:after{right:7px;bottom:8px;transform:rotate(-18deg)}
+.logo-name{font-family:"Playfair Display",serif;font-size:22px;font-weight:600;letter-spacing:-.4px}
+.logo-name small{display:block;font-family:"DM Sans";font-size:9px;letter-spacing:1.7px;text-transform:uppercase;color:#C9C5E4;margin-top:1px}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#9997B3;padding:0 11px 9px}
+.nav{display:grid;gap:5px}
+.nav button{border:0;background:transparent;color:#C8C7D7;text-align:left;padding:12px 12px;border-radius:12px;display:flex;align-items:center;gap:12px;font-size:14px;transition:.2s}
+.nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav button.active{background:#625A9B;color:#fff;box-shadow:inset 3px 0 #E19A84}
+.icon{width:19px;height:19px;display:grid;place-items:center;font-size:17px}
+.sidebar-bottom{margin-top:auto}
+.profile-mini{border-top:1px solid rgba(255,255,255,.1);padding:18px 10px 5px;display:flex;gap:10px;align-items:center}
+.avatar-sm{width:37px;height:37px;border-radius:50%;background:linear-gradient(145deg,#D5A05C,#8E6233);display:grid;place-items:center;font-weight:700;font-size:12px}
+.profile-mini b{font-size:13px}.profile-mini span{display:block;color:#A9A8B9;font-size:10px;margin-top:2px}
+.main{margin-left:255px;flex:1;min-width:0}
+.topbar{height:76px;background:rgba(247,246,251,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 42px;position:sticky;top:0;z-index:10}
+.search{width:min(420px,48vw);position:relative}.search input{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 15px 11px 40px;outline:none;color:var(--ink);font-size:13px}.search span{position:absolute;left:14px;top:10px;color:#87928F}
+.top-actions{display:flex;align-items:center;gap:12px}.currency{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 13px;display:flex;align-items:center;gap:8px;font-size:12px}.coin{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700}.bell{width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:11px;display:grid;place-items:center}
+.content{max-width:1240px;margin:auto;padding:38px 42px 65px}
+.hero{background:linear-gradient(120deg,#20243A 0%,#454268 58%,#776FB0 100%);border-radius:28px;padding:38px 42px;display:grid;grid-template-columns:1.25fr .75fr;gap:25px;color:#fff;overflow:hidden;position:relative;box-shadow:var(--shadow)}
+.hero:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;border:1px solid rgba(255,255,255,.1);right:-120px;top:-145px;box-shadow:0 0 0 45px rgba(255,255,255,.025),0 0 0 90px rgba(255,255,255,.02)}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.8px;color:#D6D2ED;margin-bottom:10px}
+.hero h1{font-family:"Playfair Display",serif;font-size:43px;line-height:1.1;font-weight:600;margin:0 0 12px;max-width:650px}
+.hero p{color:#DDD9EE;max-width:590px;line-height:1.65;font-size:14px;margin:0 0 24px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:11px;padding:11px 17px;font-weight:600;font-size:13px;transition:.2s}.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:#fff;color:var(--navy)}.btn-gold{background:var(--gold);color:#fff}.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15)}
+.hero-side{display:flex;align-items:center;justify-content:center;position:relative;z-index:1}.bridge-card{width:230px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:22px;padding:22px;backdrop-filter:blur(8px)}.bridge-card .big{font-family:"Playfair Display";font-size:28px}.bridge-card p{font-size:12px;color:#D8D5E8;margin:8px 0 18px}.progress{height:7px;border-radius:20px;background:rgba(255,255,255,.13);overflow:hidden}.progress i{display:block;height:100%;width:68%;background:#E19A84;border-radius:20px}.progress-label{display:flex;justify-content:space-between;font-size:10px;color:#D6D2ED;margin-top:8px}
+.section{margin-top:34px}.section-title{display:flex;justify-content:space-between;align-items:end;margin-bottom:14px}.section-title h2{font-family:"Playfair Display";font-size:24px;margin:0;color:var(--navy)}.section-title p{font-size:12px;color:var(--muted);margin:4px 0 0}.link{color:var(--teal);font-size:12px;font-weight:600;cursor:pointer}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.quick{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;align-items:center;gap:15px;transition:.2s;cursor:pointer}.quick:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.quick-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:21px}.q-teal{background:#EEEAFB;color:var(--teal)}.q-gold{background:#FBEAE5;color:#B8624E}.q-navy{background:#E9E9F2;color:var(--navy)}.quick h3{margin:0;font-size:14px}.quick p{margin:4px 0 0;color:var(--muted);font-size:11px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:19px;transition:.2s}.card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}.person-top{display:flex;gap:12px;align-items:center}.avatar{width:47px;height:47px;border-radius:15px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}.teal{background:linear-gradient(145deg,#8178C0,#5B5294)}.gold{background:linear-gradient(145deg,#E3A18D,#B96855)}.purple{background:linear-gradient(145deg,#A795D2,#69588F)}.card h3{margin:0;font-size:15px}.role{font-size:11px;color:var(--muted);margin-top:3px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin:15px 0}.tag{font-size:10px;color:var(--teal);background:#F1EFFB;border:1px solid #E1DDF2;border-radius:30px;padding:5px 8px}.desc{font-size:12px;color:#707386;line-height:1.55;min-height:38px}.card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-top:14px;border-top:1px solid #F0EFEA}.price{font-size:12px;color:#676A7A}.price b{color:var(--ink)}.small-btn{border:0;background:var(--navy);color:#fff;border-radius:9px;padding:8px 11px;font-size:11px;font-weight:600}.small-btn.gold-btn{background:var(--gold)}
+.panel{display:none}.panel.active{display:block}
+.page-heading{margin-bottom:24px}.page-heading h1{font-family:"Playfair Display";font-size:34px;color:var(--navy);margin:0 0 7px}.page-heading p{margin:0;color:var(--muted);font-size:13px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}.filter{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:11px;color:#596562}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:25px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px}.stat .num{font-family:"Playfair Display";font-size:28px;color:var(--navy)}.stat .label{font-size:10px;color:var(--muted);margin-top:3px}
+.empty{padding:40px;text-align:center;background:#fff;border:1px dashed #D6D7D0;border-radius:18px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);background:var(--navy);color:#fff;border-radius:12px;padding:12px 17px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:0 15px 35px rgba(0,0,0,.2)}.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal-wrap{position:fixed;inset:0;background:rgba(9,28,27,.45);display:none;align-items:center;justify-content:center;z-index:40;padding:20px}.modal-wrap.show{display:flex}.modal{background:#fff;border-radius:22px;width:min(470px,100%);padding:27px;box-shadow:0 25px 70px rgba(0,0,0,.2)}.modal h2{font-family:"Playfair Display";color:var(--navy);margin:0 0 7px}.modal p{font-size:12px;color:var(--muted);line-height:1.6}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:22px}
+.mobile-menu{display:none}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-side{display:none}.quick-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.sidebar{width:100%;height:auto;position:relative;padding:12px 15px;flex-direction:row;align-items:center}.logo{padding:0}.nav-label,.sidebar-bottom{display:none}.nav{display:flex;margin-left:auto}.nav button{padding:9px;font-size:0}.nav button .icon{font-size:17px}.main{margin-left:0}.topbar{padding:0 18px;height:67px}.search{width:52%}.content{padding:22px 17px 45px}.hero{padding:28px 23px;border-radius:22px}.hero h1{font-size:34px}.quick-grid,.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.section-title h2{font-size:21px}}
+@media(max-width:470px){.top-actions .currency{display:none}.hero h1{font-size:29px}.stats{grid-template-columns:1fr}.search{width:62%}}
+
+/* ---------- Platform top navigation ---------- */
+.app{display:block;min-height:100vh}
+.sidebar{display:none}
+.main{margin-left:0;min-width:0}
+.topbar{height:82px;padding:0 42px;gap:25px;background:rgba(247,246,251,.94);border-bottom:1px solid var(--line);box-shadow:0 4px 18px rgba(32,36,58,.04)}
+.top-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.top-logo .logo-name{color:var(--navy)}
+.top-logo .logo-name small{color:#8886A5}
+.top-nav{display:flex;align-items:center;gap:4px;margin-left:8px}
+.top-nav button{border:0;background:transparent;color:#6D7083;padding:10px 13px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap;transition:.2s}
+.top-nav button:hover{background:#EEEAFB;color:var(--navy)}
+.top-nav button.active{background:#EAE6F8;color:#5D5592}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:9px}
+.top-actions .search{width:190px}
+.top-actions .currency{white-space:nowrap}
+.profile-pill{height:38px;border:1px solid var(--line);background:#fff;border-radius:11px;padding:4px 10px 4px 5px;display:flex;align-items:center;gap:7px;color:var(--navy);font-size:11px}
+.profile-pill span{width:28px;height:28px;border-radius:9px;background:linear-gradient(145deg,#E3A18D,#B96855);color:#fff;display:grid;place-items:center;font-weight:700}
+.profile-pill b{font-weight:600}
+.content{max-width:1320px;padding:42px 48px 70px}
+@media(max-width:1180px){
+  .topbar{padding:0 24px;gap:12px}
+  .top-nav{gap:0}
+  .top-nav button{padding:9px 9px}
+  .top-actions .search{width:150px}
+}
+@media(max-width:980px){
+  .topbar{flex-wrap:wrap;height:auto;min-height:76px;padding:12px 18px}
+  .top-logo{order:1}
+  .top-actions{order:2;margin-left:auto}
+  .top-nav{order:3;width:100%;overflow-x:auto;padding-bottom:2px}
+  .top-nav button{flex:0 0 auto}
+  .content{padding:28px 25px 55px}
+}
+@media(max-width:600px){
+  .top-logo .logo-name small{display:none}
+  .top-logo .logo-name{font-size:19px}
+  .top-actions .search{display:none}
+  .profile-pill b{display:none}
+  .profile-pill{padding-right:5px}
+  .content{padding:20px 16px 45px}
+}
+
+/* ---------- AlmaBridge page themes & interactive filters ---------- */
+body.theme-home{--page-accent:#7B1E3A;--page-soft:#F5E7E9;--page-gold:#C8923E}
+body.theme-mentor{--page-accent:#7B1E3A;--page-soft:#F4E2E6;--page-gold:#C8923E}
+body.theme-workshop{--page-accent:#A66A1F;--page-soft:#F7EEDC;--page-gold:#B9822D}
+body.theme-gig{--page-accent:#8E263D;--page-soft:#F3E3E7;--page-gold:#C8923E}
+body.theme-profile{--page-accent:#5F172D;--page-soft:#F1E5E5;--page-gold:#C8923E}
+
+.top-nav button.active{background:var(--page-soft);color:var(--page-accent)}
+.hero{background:linear-gradient(120deg,#4B1427 0%,#711E38 56%,#9A5A31 100%)}
+.hero .btn-primary{color:#5A182C}
+.btn-gold,.gold-btn{background:var(--page-gold)!important}
+.quick-icon.q-teal{background:#F2E2E6;color:#7B1E3A}
+.quick-icon.q-gold{background:#F7EEDC;color:#A66A1F}
+.quick-icon.q-navy{background:#EEE4E2;color:#6A2738}
+.tag{color:var(--page-accent);background:var(--page-soft);border-color:#E9D3D8}
+.page-heading h1,.section-title h2{color:#4B1427}
+.link{color:var(--page-accent)}
+.filter{transition:.18s;cursor:pointer}
+.filter:hover{border-color:#C8923E;transform:translateY(-1px)}
+.filter.active{background:var(--page-accent);border-color:var(--page-accent);color:#fff}
+.filter[data-filter="all"].active{background:#4B1427}
+.card:hover{border-color:#E2C8CA}
+.small-btn{background:#5A182C}
+.top-logo .logo-mark{background:linear-gradient(145deg,#D6A45B,#7B1E3A)}
+.profile-pill span{background:linear-gradient(145deg,#D6A45B,#7B1E3A)}
+.progress i{background:#C8923E}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div class="main">
+<header class="topbar">
+  <a class="top-logo" href="#" onclick="go('home');return false;">
+    <div class="logo-mark"></div>
+    <div class="logo-name">AlmaBridge<small>Learn · Connect · Grow</small></div>
+  </a>
+
+  <nav class="top-nav">
+    <button class="active" data-page="home">Home</button>
+    <button data-page="mentors">Find a Mentor</button>
+    <button data-page="workshops">Skill Workshops</button>
+    <button data-page="gigs">Gig Board</button>
+    <button data-page="profile">My Profile</button>
+  </nav>
+
+  <div class="top-actions">
+    <div class="search"><span>⌕</span><input id="globalSearch" placeholder="Search..." oninput="globalSearch()"></div>
+    <div class="currency"><div class="coin">CC</div><b id="wallet">40</b></div>
+    <button class="profile-pill" onclick="go('profile')"><span>NJ</span><b>Nishika</b></button>
+    <button class="bell" onclick="showToast('You are all caught up ✦')">♢</button>
+  </div>
+</header>
+
+<main class="content">
+<section class="panel active" id="home">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Your career, connected</div>
+      <h1>Bridge the gap between where you are and where you want to go.</h1>
+      <p>AlmaBridge brings mentors, practical workshops and real student-friendly opportunities into one simple space — so every next step feels closer.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="go('mentors')">Find my mentor →</button>
+        <button class="btn btn-ghost" onclick="go('gigs')">Explore gigs</button>
+      </div>
+    </div>
+    <div class="hero-side"><div class="bridge-card"><div class="big">68%</div><p>Your career profile is taking shape. Keep building skills and connections.</p><div class="progress"><i></i></div><div class="progress-label"><span>Profile progress</span><b>68%</b></div></div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><div><div class="eyebrow" style="color:var(--teal);margin-bottom:5px">Explore AlmaBridge</div><h2>Start with what you need</h2><p>Three ways to move forward today.</p></div></div>
+    <div class="quick-grid">
+      <div class="quick" onclick="go('mentors')"><div class="quick-icon q-teal">♧</div><div><h3>Find a Mentor</h3><p>Get guidance from alumni & industry experts.</p></div></div>
+      <div class="quick" onclick="go('workshops')"><div class="quick-icon q-gold">◇</div><div><h3>Build a Skill</h3><p>Learn practical skills in small workshops.</p></div></div>
+      <div class="quick" onclick="go('gigs')"><div class="quick-icon q-navy">✦</div><div><h3>Find a Gig</h3><p>Turn your skills into real experience.</p></div></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num" id="s1">0</div><div class="label">Mentor sessions booked</div></div>
+    <div class="stat"><div class="num" id="s2">0</div><div class="label">Workshops enrolled</div></div>
+    <div class="stat"><div class="num" id="s3">0</div><div class="label">Gigs applied to</div></div>
+    <div class="stat"><div class="num" id="s4">40</div><div class="label">Campus Currency earned</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><div><h2>Picked for you</h2><p>Based on your career goals and interests.</p></div><span class="link" onclick="go('mentors')">View all →</span></div>
+    <div class="grid" id="home-reco"></div>
+  </div>
+</section>
+
+<section class="panel" id="mentors">
+  <div class="page-heading"><h1>Find a Mentor</h1><p>Get practical guidance from alumni and professionals who have already walked the path.</p></div><div style="font-size:11px;color:#7B1E3A;background:#F5E7E9;border:1px solid #E9D3D8;border-radius:10px;padding:9px 12px;margin-bottom:16px">Demo profiles for the prototype. Company associations shown here are fictional examples for illustrating the AlmaBridge experience.</div>
+  <div class="filters" data-filter-group="mentor">
+<button class="filter active" data-filter="all">All mentors</button>
+<button class="filter" data-filter="marketing">Marketing</button>
+<button class="filter" data-filter="consulting">Consulting</button>
+<button class="filter" data-filter="analytics">Analytics</button>
+<button class="filter" data-filter="product">Product</button>
+</div>
+  <div class="grid" id="mentor-list"></div>
+</section>
+
+<section class="panel" id="workshops">
+  <div class="page-heading"><h1>Skill Workshops</h1><p>Short, practical sessions for skills, resumes, interviews, guesstimates and career storytelling.</p></div>
+  <div class="filters" data-filter-group="workshop">
+<button class="filter active" data-filter="all">All workshops</button>
+<button class="filter" data-filter="marketing">Marketing</button>
+<button class="filter" data-filter="analytics">Analytics</button>
+<button class="filter" data-filter="interview">Interview prep</button><button class="filter" data-filter="resume">Resume</button><button class="filter" data-filter="guesstimates">Guesstimates</button>
+</div>
+  <div class="grid" id="workshop-list"></div>
+</section>
+
+<section class="panel" id="gigs">
+  <div class="page-heading"><h1>Gig Board</h1><p>Find flexible, student-friendly work and build experience while you study.</p></div>
+  <div class="filters" data-filter-group="gig">
+<button class="filter active" data-filter="all">All gigs</button>
+<button class="filter" data-filter="remote">Remote</button>
+<button class="filter" data-filter="hyderabad">Hyderabad</button>
+<button class="filter" data-filter="marketing">Marketing</button>
+<button class="filter" data-filter="data">Data</button>
+</div>
+  <div class="grid" id="gig-list"></div>
+</section>
+
+<section class="panel" id="profile">
+  <div class="page-heading"><h1>My Profile</h1><p>Shape your profile so AlmaBridge can make better recommendations.</p></div>
+  <div class="card" style="max-width:720px">
+    <div class="person-top"><div class="avatar gold">NJ</div><div><h3>Nishika Jain</h3><div class="role">MBA · Marketing · Batch 2025–27</div></div></div>
+    <div class="tags"><span class="tag">Brand Management</span><span class="tag">Product</span><span class="tag">Strategy</span><span class="tag">Consulting</span></div>
+    <p class="desc">Your profile connects your interests with relevant mentors, workshops and opportunities.</p>
+    <div class="card-foot"><span class="price"><b>Profile strength</b></span><span style="font-size:12px;color:var(--green);font-weight:700">68% complete</span></div>
+  </div>
+</section>
+</main>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal-wrap" id="modal">
+  <div class="modal"><h2 id="modalTitle">You're on your way.</h2><p id="modalText"></p><div class="modal-actions"><button class="btn" style="background:#F0EFF5;color:var(--ink)" onclick="closeModal()">Close</button><button class="btn btn-gold" onclick="closeModal()">Continue</button></div></div>
+</div>
+
+<script>
+const mentors=[
+{name:"Rhea Mehta",role:"Growth Manager · Zomato",initials:"RM",tone:"teal",tags:["Growth","Marketing"],desc:"Learn growth experiments, campaign thinking and how consumer internet teams approach problems.",price:"₹499 / session"},
+{name:"Arjun Malhotra",role:"Product Manager · Razorpay",initials:"AM",tone:"gold",tags:["Product","Strategy"],desc:"Understand product cases, prioritisation, metrics and how to structure product interview answers.",price:"₹599 / session"},
+{name:"Sneha Iyer",role:"Brand Manager · Unilever",initials:"SI",tone:"purple",tags:["Brand Mgmt","FMCG"],desc:"Explore brand strategy, consumer insights and how to approach FMCG marketing interviews.",price:"₹449 / session"},
+{name:"Karan Shah",role:"Business Analyst · Deloitte",initials:"KS",tone:"teal",tags:["Consulting","Analytics"],desc:"Practice consulting-style problem solving, structured communication and case interviews.",price:"₹499 / session"},
+{name:"Aditi Rao",role:"Category Manager · Swiggy",initials:"AR",tone:"gold",tags:["Category","E-commerce"],desc:"Learn category thinking, marketplace metrics and how to discuss business impact in interviews.",price:"₹499 / session"},
+{name:"Vikram Nair",role:"Strategy Associate · EY",initials:"VN",tone:"purple",tags:["Strategy","Guesstimates"],desc:"Build structured approaches to guesstimates, market sizing and strategy case questions.",price:"₹449 / session"}
+];
+const workshops=[
+{name:"Structure Your Resume",host:"AlmaBridge Career Studio",initials:"CV",tone:"teal",tags:["Resume","90 mins"],desc:"Turn your education, projects, work and internship experience into concise, impact-led resume bullets.",price:"₹199"},
+{name:"How to Answer Guesstimates",host:"Karan Shah · Deloitte",initials:"GS",tone:"gold",tags:["Guesstimates","2 sessions"],desc:"Learn a repeatable framework for estimation, assumptions, calculations and communicating your answer.",price:"₹299"},
+{name:"Tell Your Internship Story",host:"AlmaBridge Career Studio",initials:"IS",tone:"purple",tags:["Interview Prep","90 mins"],desc:"Structure your internship into a strong interview story: context, action, results, learning and business impact.",price:"₹199"},
+{name:"Present Your Work Experience",host:"AlmaBridge Career Studio",initials:"WE",tone:"teal",tags:["Work Experience","90 mins"],desc:"Learn how to explain responsibilities, achievements, challenges and leadership experience with clarity.",price:"₹199"},
+{name:"Cracking the Case Interview",host:"Karan Shah · Deloitte",initials:"CI",tone:"gold",tags:["Interview Prep","3 sessions"],desc:"Practice structured problem solving, hypothesis-led thinking and clear case communication.",price:"₹399"},
+{name:"Power BI Fundamentals",host:"Ananya Deshmukh · Industry",initials:"PB",tone:"purple",tags:["Power BI","4 sessions"],desc:"Build dashboards, learn DAX fundamentals and create a portfolio-ready project.",price:"₹499"},
+{name:"Brand Strategy in Practice",host:"Sneha Iyer · Unilever",initials:"BS",tone:"teal",tags:["Marketing","2 sessions"],desc:"Go from consumer insight to positioning, campaign thinking and brand interview questions.",price:"₹349"}
+];
+const gigs=[
+{name:"Social Media & Digital Menu",biz:"Campus Corner Café · Hyderabad",initials:"CC",tone:"teal",tags:["Content","5 hrs/week"],desc:"Create Instagram content and help launch a digital menu.",price:"₹4,000 / month"},
+{name:"Data Entry & Cleanup",biz:"Orbit Logistics · HITEC City",initials:"OL",tone:"gold",tags:["Excel","Short-term"],desc:"Two-week project cleaning and organising shipment records.",price:"₹6,000 flat"},
+{name:"Social Media Support",biz:"Café Leaf · Gachibowli",initials:"CL",tone:"purple",tags:["Design","Flexible"],desc:"Support Instagram content for a new café launch.",price:"₹5,000 / month"},
+{name:"Campus Brand Research",biz:"Local D2C Brand · Hyderabad",initials:"DR",tone:"teal",tags:["Research","Flexible"],desc:"Run short student interviews and summarise consumer insights.",price:"₹3,500 flat"}
+];
+let wallet=40,sessions=0,workshopCount=0,gigCount=0,earned=40;
+const booked=new Set(), enrolled=new Set(), applied=new Set();
+
+function card(item,type,i){
+ const action=type==="mentor"?`book(${i})`:type==="workshop"?`enroll(${i})`:`apply(${i})`;
+ const done=type==="mentor"?booked.has(i):type==="workshop"?enrolled.has(i):applied.has(i);
+ const label=done?(type==="mentor"?"Booked ✓":type==="workshop"?"Enrolled ✓":"Applied ✓"):(type==="mentor"?"Book session":type==="workshop"?"Enroll":"Apply");
+ const sub=type==="mentor"?item.role:type==="workshop"?"Hosted by "+item.host:item.biz;
+ return `<article class="card searchable" data-search="${(item.name+" "+sub+" "+item.tags.join(" ")).toLowerCase()}" data-categories="${(item.tags.join(" ")+" "+sub).toLowerCase()}">
+ <div class="person-top"><div class="avatar ${item.tone}">${item.initials}</div><div><h3>${item.name}</h3><div class="role">${sub}</div></div></div>
+ <div class="tags">${item.tags.map(x=>`<span class="tag">${x}</span>`).join("")}</div>
+ <div class="desc">${item.desc}</div>
+ <div class="card-foot"><span class="price"><b>${item.price}</b></span><button class="small-btn ${type==="workshop"?"gold-btn":""}" onclick="${action}" ${done?"disabled":""}>${label}</button></div>
+ </article>`;
+}
+function render(){
+ document.getElementById("mentor-list").innerHTML=mentors.map((x,i)=>card(x,"mentor",i)).join("");
+ document.getElementById("workshop-list").innerHTML=workshops.map((x,i)=>card(x,"workshop",i)).join("");
+ document.getElementById("gig-list").innerHTML=gigs.map((x,i)=>card(x,"gig",i)).join("");
+ document.getElementById("home-reco").innerHTML=mentors.slice(0,2).map((x,i)=>card(x,"mentor",i)).join("");
+ update();
+}
+function update(){
+ walletEl("wallet",wallet);walletEl("s1",sessions);walletEl("s2",workshopCount);walletEl("s3",gigCount);walletEl("s4",earned);
+}
+function walletEl(id,v){document.getElementById(id).textContent=v}
+function showModal(title,text){document.getElementById("modalTitle").textContent=title;document.getElementById("modalText").textContent=text;document.getElementById("modal").classList.add("show")}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2400)}
+function book(i){if(booked.has(i))return;booked.add(i);sessions++;wallet+=10;earned+=10;render();showModal("Mentor session booked",`Your session with ${mentors[i].name} is added to your AlmaBridge activity. You earned 10 Campus Currency.`)}
+function enroll(i){if(enrolled.has(i))return;enrolled.add(i);workshopCount++;wallet+=15;earned+=15;render();showModal("Workshop reserved",`You're enrolled in ${workshops[i].name}. You earned 15 Campus Currency.`)}
+function apply(i){if(applied.has(i))return;applied.add(i);gigCount++;wallet+=5;earned+=5;render();showModal("Application submitted",`Your application for ${gigs[i].name} has been recorded. You earned 5 Campus Currency.`)}
+function go(page){document.querySelector(`[data-page="${page}"]`).click()}
+document.querySelectorAll(".top-nav button").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll(".top-nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+ document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.page).classList.add("active");
+ document.body.className="theme-"+b.dataset.page;
+ window.scrollTo({top:0,behavior:"smooth"});
+}));
+function globalSearch(){
+ const q=document.getElementById("globalSearch").value.toLowerCase().trim();
+ if(q){
+   const target=document.getElementById("mentors");
+   document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+   target.classList.add("active");
+   document.querySelectorAll(".top-nav button").forEach(x=>x.classList.toggle("active",x.dataset.page==="mentors"));
+   document.body.className="theme-mentor";
+ }
+ document.querySelectorAll(".searchable").forEach(el=>{
+   const matches=!q || el.dataset.search.includes(q);
+   el.style.display=matches?"block":"none";
+ });
+}
+
+document.querySelectorAll(".filters").forEach(group=>{
+  group.querySelectorAll(".filter").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      group.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));
+      btn.classList.add("active");
+      const value=btn.dataset.filter;
+      const panel=group.closest(".panel");
+      const cards=panel.querySelectorAll(".searchable");
+      cards.forEach(card=>{
+        if(value==="all"){card.style.display="block";return;}
+        const text=card.dataset.categories || "";
+        const aliases={
+          marketing:["marketing","brand","growth","digital","zomato","unilever","swiggy"],
+          consulting:["consulting","strategy","case"],
+          analytics:["analytics","power bi","excel","data"],
+          product:["product","strategy"],
+          interview:["interview","case"],
+resume:["resume","cv"],
+guesstimates:["guesstimate","guesstimates"],
+          remote:["remote","flexible"],
+          hyderabad:["hyderabad","gachibowli","hitec"],
+          data:["data","excel","research"]
+        };
+        const terms=aliases[value] || [value];
+        card.style.display=terms.some(t=>text.includes(t))?"block":"none";
+      });
+    });
+  });
+});
+
+document.body.className='theme-home';
+render();
+</script>
+</body>
+</html>
